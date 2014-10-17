@@ -1,0 +1,34 @@
+<html>
+  <head>
+  </head>
+  <body bgcolor="#FFE084">
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="highcharts.js"></script>
+    <script src="highcharts-more.js"></script>
+    <script src="exporting.js"></script>
+
+    <!--Charts Config-->
+    <script src="charts-config.js"></script>
+    <!--script src="compaction-plot.js"></script-->
+    <script src="line-charts-wb.js"></script>
+    <script src="variables.js"></script>
+    <div id="header" align="center" style="width: 100%;height: 70px;margin: 0; top:0;left:0; position:fixed;background-color:#000000 ;display:block;z-index:1000;border-bottom: 4px solid #ffbe00;">
+      <image src="http://rocksdb.org/wp-content/themes/rocksdb/rocksdb.png" height="70px">
+      </image>
+    </div>
+    <div id="content" style="width:100%; position:absolute; top:70px;margin: 0;padding:0;">
+      <div id="graph-content" style="width:75%;float:left;">
+	<div id="event-timeline" style="width:100%;min-width: 310px; height: 80%; margin: 5;"></div>
+	<div id="amount-of-writes" style="width:100%;min-width: 310px; height: 100%; margin: 5;"></div>
+	<div id="container" style="display:hidden;width:90%;min-width: 310px; height: 80%; margin: 5;"></div>
+      </div>
+      <div id="links" style="width:15%;margin: 0;height:40px;padding:0;float:left;">
+	<ul>
+	  <li style="list-style-type: none;"><a href="logs.html" style="text-decoration: none;"><b>LOGS</b></a></li>
+	  <li style="list-style-type: none;"><a href="summary.html" style="text-decoration: none;"><b>SUMMARY</b></a></li>
+	  <li style="list-style-type: none;"><a href="#" style="text-decoration: none;"><b>OTHER</b></a></li>
+	</ul>
+      </div>
+    </div>
+  </body>
+</html>
