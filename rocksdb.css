@@ -1,0 +1,26 @@
+.v-separator
+{
+    content: "";
+    display: inline-block;
+    width: 0px;
+    height: 180px;
+    border-right: 1px solid #fafafa;
+    border-left: 1px solid #b4b4b4;
+    padding: 0;
+    margin-right: 6px;
+    position: relative;
+    float: left;
+    top: 20px;
+}
+
+#layers ul {
+  margin: 0;
+  list-style: none;
+  float: left;
+}
+
+label{
+display: block;
+  float: left;
+  width: 30%;
+}

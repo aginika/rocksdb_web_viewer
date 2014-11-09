@@ -33,6 +33,6 @@ $(function () {
 			pointFormat: '{point.x:%b/%e-%H:%M:%S.%L}: {point.y:%.1f} wb/s'
 			},
 
-		    series: [datas_L1,datas_L2]
+		    series: [write_datas_L1,write_datas_L2]
 		    });
     });

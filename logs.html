@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="rocksdb.css"/>
   </head>
   <body bgcolor="#FFE084">
     <script src="jquery-2.1.1.min.js"></script>
@@ -19,14 +20,50 @@
     <div id="content" style="width:100%; position:absolute; top:70px;margin: 0;padding:0;">
       <div id="graph-content" style="width:75%;float:left;">
 	<div id="event-timeline" style="width:100%;min-width: 310px; height: 80%; margin: 5;"></div>
-	<div id="amount-of-writes" style="width:100%;min-width: 310px; height: 100%; margin: 5;"></div>
+	<div id="log-graphs">
+	  <div align="center" id="graph-setting-panels" style="width:95%;min-width: 310px; height: auto; margin: 5;background-color: #FFF9B1;border-style: solid;border-width: 0px;border-color: #FFF9B1;border-radius:5px;float:left;margin:10 10;margin-left: 25px">
+	    <div id="layers" style="height:100%;width:30%;float:left;padding:0;background-color: transparent;">
+	      <ul style="padding:0;margin:8;">
+		<li style="list-style-type: none;"><b>LAYERS</b></li>
+		<ul>
+		  <li><input id="L0_check" layer="0" type="checkbox" checked>L0</li>
+		  <li><input id="L1_check" layer="1" type="checkbox" checked>L1</li>
+		  <li><input id="L2_check" layer="2" type="checkbox" checked>L2</li>
+		  <li><input id="L3_check" layer="3" type="checkbox" checked>L3</li>
+		  <li><input id="L4_check" layer="4" type="checkbox" checked>L4</li>
+		  <li><input id="L5_check" layer="5" type="checkbox" checked>L5</li>
+		  <li><input id="L6_check" layer="6" type="checkbox" checked>L6</li>
+		</ul>
+	      </ul>
+	    </div>
+	    <div class="v-separator"></div>
+	    <div id="selectors" style="height:100%;width:65%;float:left;background-color: transparent" align="left">
+	      <div style="margin-top:7px">
+		<b>VARIABLES</b>
+	      </div>
+	      <div style="margin-top:0px;margin-left:20px;padding:0px">
+		<label><input id="filenum" type="checkbox">Filenums</label>
+		<label><input id="readbytes" type="checkbox">ReadBytes</label>
+		<label><input id="writebytes" type="checkbox">WriteBytes</label>
+		<label><input id="inputnmb" type="checkbox">InputFileNMB</label>
+		<label><input id="inputnp1mb" type="checkbox">InputFileNp1MB</label>
+		<label><input id="outputmb" type="checkbox">OutputFileMB</label>
+		<label><input id="readam" type="checkbox">ReadAmplify</label>
+		<label><input id="writeam" type="checkbox">WriteAmplify</label>
+	      </div>
+	    </div>
+	  </div>
+	  <div id="amount-of-writes" style="width:100%;min-width: 310px; height: 100%; margin: 5;"></div>
+	</div>
 	<div id="container" style="display:hidden;width:90%;min-width: 310px; height: 80%; margin: 5;"></div>
       </div>
       <div id="links" style="width:15%;margin: 0;height:40px;padding:0;float:left;">
-	<ul>
-	  <li style="list-style-type: none;"><a href="logs.html" style="text-decoration: none;"><b>LOGS</b></a></li>
+	<ul style="margin-top:30px">
+	  <li style="list-style-type: none;"><a href="logs.html" style="text-decoration: none;"><b>LOGS</b></a>
+	  </li>
 	  <li style="list-style-type: none;"><a href="summary.html" style="text-decoration: none;"><b>SUMMARY</b></a></li>
-	  <li style="list-style-type: none;"><a href="events.html" style="text-decoration: none;"><b>EVENTS</b></a></li>
+	  <li style="list-style-type: none;"><a href="events.html" style="text-decoration: none;"><b>EVENTS</b></a>
+	  </li>
 	</ul>
       </div>
     </div>

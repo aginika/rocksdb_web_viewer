@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <script>
+      var w = 500;
+      var h = 500;
+      var svg = d3.select("body")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+      var dataset = [ 5, 10, 15, 20, 25 ];
+      var circles = svg.selectAll("circle")
+      .data(dataset)
+      .enter()
+      .append("circle");
+      circles.attr("cx", function(d, i) {
+      return (i * 50) + 25;
+      })
+      .attr("cy", h/2)
+      .attr("r", function(d) {
+      return d;
+      })
+      .attr("fill", "#ff0000");
+
+      var bar = svg.selectAll("rect")
+      .data([1])
+      .enter()
+      .append("rect")
+      .attr("width",30)
+      .attr("height",30)
+      .attr("x", 0)
+      .attr("fill", "#ff0000")
+      .transition().duration(2000).attr("x",400).attr("fill", "#0000ff").remove();
+
+      var data = [[0,2], [5,6]];
+      var x = d3.scale.linear().domain([0, 10]).range([0, 700]);
+      var y = d3.scale.linear().domain([0, 10]).range([10, 290]);
+      var line = d3.svg.line()
+      .interpolate("cardinal")
+      .x(function(d) {return x(d[0]);})
+      .y(function(d) {return y(d[1]);})
+      
+      var path = svg.selectAll("path")
+      .data([[1000, [[0,200],[500,60]]],[2000, [[10,40], [0,700]]],[3000, [[00,300], [40,600]]]])
+      .enter().append("path")
+      .attr("d", line(data))
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", "4")
+      .attr("fill", "none");
+
+      var totalLength = path.node().getTotalLength();
+
+      path
+      .attr("stroke-dasharray", totalLength/5 + " " + totalLength)
+      .attr("stroke-dashoffset", totalLength/5)
+      .transition()
+      .delay(function(d){return d[0];})
+      .duration(1000)
+      .ease("linear")
+      .attr("stroke-dashoffset", -totalLength)
+      .remove();
+    </script>
+  </body>
+</html>
