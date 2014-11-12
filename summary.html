@@ -6,6 +6,7 @@
     <script src="highcharts.js"></script>
     <script src="highcharts-more.js"></script>
     <script src="exporting.js"></script>
+    <script src="summary.js"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
     <!--Charts Config-->
@@ -23,17 +24,15 @@
 	<div id="amount-of-writes" style="width:100%;min-width: 310px; height: 100%; margin: 5;"></div>
 	<div id="svg-content" style="display:hidden;width:90%;min-width: 310px; height: 80%; margin: 5;"></div>
 	<div style="height:auto;width:100%;margin-bottom:30px;padding:0" align="center">
-	  <table border="1" width="800" cellspacing="0" cellpadding="5" bordercolor="#333333" style="border-radius:5px;">
+	  <table border="1" width="1000" cellspacing="0" cellpadding="5" bordercolor="#333333" style="border-radius:5px;table-layout: fixed;" id="option_tables">
 	    <tr>
-	      <th bgcolor="#FFEEAA" colspan="2" align="left"><h2 style="margin:0;padding:0"><font color="#222222">Options</font></h2></th>
+	      <th bgcolor="#FFEEAA" colspan="4" align="left"><h2 style="margin:0;padding:0"><font color="#222222">Options</font></h2></th>
 	    </tr>
 	    <tr>
-	      <th bgcolor="#FFeeAA" width="150"><font color="#222222">Property</font></th>
+	      <th bgcolor="#FFeeAA" width="200"><font color="#222222">Property</font></th>
 	      <th bgcolor="#FFeeAA" width="200"><font color="#333333">Value</font></th>
-	    </tr>
-	    <tr>
-	      <td bgcolor="#ffc585" align="center" nowrap>size</td>
-	      <td bgcolor="#FFFFFF" align="center" width="150">1</td>
+	      <th bgcolor="#FFeeAA" width="200"><font color="#222222">Property</font></th>
+	      <th bgcolor="#FFeeAA" width="200"><font color="#333333">Value</font></th>
 	    </tr>
 	  </table>
 	</div>
@@ -58,12 +57,11 @@
       .attr("width", w)
       .attr("height", h);
 
-
       //Draw DB
-      var db_height = 180;
+      var db_height = 150;
       var db_width = 280;
       var stroke_width = 2;
-      var db_y = 100;
+      var db_y = 150;
       var db_x = 10;
       var ellipse_y = 30;
       var db_rects = svg.selectAll("db_rects")
@@ -98,12 +96,54 @@
       .attr("y", db_y + db_height/2)
       .attr("fill", "#ffee99");
 
+      //DB and Text .
+      var text_datas = [["Run Time: ", latest_statistics_total_datas[0],"(sec)"],
+                        ["Writes  : ", latest_statistics_total_datas[1],"(times)"],
+                        ["Batches : ", latest_statistics_total_datas[2],"(times)"],
+                        ["Ingest  : ", latest_statistics_total_datas[3],"(GB)"],
+                        ["Flush   : ", latest_statistics_total_datas[4],"(GB)"]];
+      var db_text = svg.selectAll(".db_text")
+      .data(text_datas)
+      .enter()
+      .append("text")
+      .attr("class", "db_text")
+      .attr("x", db_x + 30)
+      .attr("y", function(d, i){return db_y + 60 + i * 25;})
+      .text(function(d){return d[0]+d[1]+d[2];})
+      .attr("font-weight", "bold")
+      .attr("font-family", "selif");
+
+      //Memory Picture
+//      var memory_x = 20;
+ //     var memory_y = 20;
+  //    var memory_width = 280;
+  ///    var memory_height = 60;
+  //    var memory_base = svg.selectAll("memory_base")
+//      .data([1])
+//      .enter()
+///      .append("rect")
+///      .attr("width", memory_width)
+ ///     .attr("height", memory_height)
+  ///    .attr("x", memory_x)
+  //    .attr("y", memory_y)
+  //    .attr("fill", "#00aa00");
+ // /    var memory_piece = svg.selectAll("memory_piece")
+//      .data([1,1,1,1])
+ //     .enter()
+   //   .append("rect")
+     // .attr("width", memory_height - 20)
+//      .attr("height", memory_height - 20)
+  //    .attr("x", function(d,i){return memory_x + 20 + (memory_height+5) * i;})
+   //   .attr("y", memory_y + 10)
+    //  .attr("fill", "#555555");
+
+
       //Layer id, file nums,
       var layer_datas = [
-      [0, {filenum:10, filesize:10}],
-      [1, {filenum:5, filesize:100}],
-      [2, {filenum:12, filesize:7000}],
-      [3, {filenum:9, filesize:10000}],
+      [0, {filenum:4, filesize:8}],
+      [1, {filenum:1730, filesize:3354}],
+      [2, {filenum:590, filesize:1223}],
+      [3, {filenum:0, filesize:0}],
       [4, {filenum:0, filesize:0}],
       [5, {filenum:0, filesize:0}],
       [6, {filenum:0, filesize:0}]];
@@ -124,8 +164,8 @@
       .attr("stroke-width", 2)
       .attr("stroke", "#ffbe00");
 
-      var max_file_num = 12;
-      var max_file_size = 10000;
+      var max_file_num = 4 + 1730 + 590;
+      var max_file_size = 8 + 3354 + 1223;
 
       var layers_by_filesize = svg.selectAll(".f_layers")
       .data(layer_datas)
