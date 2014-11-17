@@ -10470,7 +10470,7 @@ var option_datas_0 =
 '0',
 '18446744073709551615',
 '0',
-'1000',
+'500',
 '1',
 '0',
 '0',
@@ -10478,7 +10478,7 @@ var option_datas_0 =
 '0',
 '/tmp/rocksdbtest-501/dbbench',
 '4',
-'16',
+'8',
 '0',
 '1',
 '1',
@@ -10490,12 +10490,12 @@ var option_datas_0 =
 '0',
 '1',
 '0',
-'300',
+'450',
 '1',
 'NORMAL',
 '0',
 '0x0',
-'1048576',
+'1049576',
 'manifest',
 'from',
 'for',
@@ -10507,7 +10507,7 @@ var option_datas_0 =
 'SkipListFactory',
 'BlockBasedTable',
 'options:',
-'4194304',
+'4194302',
 '2',
 '1',
 'nullptr',
@@ -10563,11 +10563,11 @@ var option_datas_0 =
 ];
 var latest_statistics_total_datas_0 = 
 [
-'5678.3',
-'94666',
-'94666',
-'8.82',
-'4.851',
+'4678.3',
+'10666',
+'9356',
+'2.82',
+'7.851',
 ];
 var latest_statistics_compaction_datas_0 = 
 [
