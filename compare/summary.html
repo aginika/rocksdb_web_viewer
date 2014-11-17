@@ -1,0 +1,247 @@
+<html>
+  <head>
+  </head>
+  <body bgcolor="#FFE084">
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="highcharts.js"></script>
+    <script src="highcharts-more.js"></script>
+    <script src="exporting.js"></script>
+    <script src="summary.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+    <!--Charts Config-->
+    <script src="charts-config.js"></script>
+    <!--script src="compaction-plot.js"></script-->
+    <!--script src="line-charts-wb.js"></script-->
+    <script src="variables.js"></script>
+    <div id="header" align="center" style="width: 100%;height: 70px;margin: 0; top:0;left:0; position:fixed;background-color:#000000 ;display:block;z-index:1000;border-bottom: 4px solid #ffbe00;">
+      <image src="http://rocksdb.org/wp-content/themes/rocksdb/rocksdb.png" height="70px">
+      </image>
+    </div>
+    <div id="content" style="width:100%; position:absolute; top:70px;margin: 0;padding:0;">
+      <div id="graph-content" style="width:75%;float:left;">
+	<div id="event-timeline" style="width:100%;min-width: 310px; height: 80%; margin: 5;"></div>
+	<div id="amount-of-writes" style="width:100%;min-width: 310px; height: 100%; margin: 5;"></div>
+	<div id="svg-content" style="display:hidden;width:90%;min-width: 310px; height: 80%; margin: 5;"></div>
+	<div style="height:auto;width:100%;margin-bottom:30px;padding:0" align="center">
+	  <table border="1" width="1000" cellspacing="0" cellpadding="5" bordercolor="#333333" style="border-radius:5px;table-layout: fixed;" id="option_tables">
+	    <tr>
+	      <th bgcolor="#FFEEAA" colspan="3" align="left"><h2 style="margin:0;padding:0"><font color="#222222">Options</font></h2></th>
+	    </tr>
+	    <tr>
+	      <th bgcolor="#FFeeAA" width="200"><font color="#222222">Property</font></th>
+	      <th bgcolor="#FFeeAA" width="200"><font color="#333333">DB1 Value</font></th>
+	      <th bgcolor="#FFeeAA" width="200"><font color="#333333">DB2 Value</font></th>
+	    </tr>
+	  </table>
+	</div>
+      </div>
+      <div id="links" style="width:15%;margin: 0;height:40px;padding:0;float:left;">
+	<ul>
+	  <li style="list-style-type: none;"><a href="logs.html" style="text-decoration: none;"><b>LOGS</b></a></li>
+	  <li style="list-style-type: none;"><a href="summary.html" style="text-decoration: none;"><b>SUMMARY</b></a></li>
+	  <li style="list-style-type: none;"><a href="events.html" style="text-decoration: none;"><b>EVENTS</b></a></li>
+	</ul>
+      </div>
+    </div>
+
+    <script>
+      var w = 1000;
+      var h = 350;
+      var bar_height = 30;
+      var bar_between = 10;
+      var bar_x_offset = 350;
+      var svg = d3.select("#svg-content")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+      //Draw DB
+      var db_height = 150;
+      var db_width = 280;
+      var stroke_width = 2;
+      var db_y = 150;
+      var db_x = 10;
+      var ellipse_y = 30;
+      var db_rects = svg.selectAll("db_rects")
+      .data([1])
+      .enter()
+      .append("rect")
+      .attr("width", db_width)
+      .attr("height", db_height)
+      .attr("x", db_x)
+      .attr("y", db_y)
+      .attr("fill", "#ffee99")
+      .attr("stroke-width", stroke_width)
+      .attr("stroke", "black");
+      var db_ellipses = svg.selectAll("db_ellipse")
+      .data([db_y, db_y + db_height])
+      .enter()
+      .append("ellipse")
+      .attr("cx", db_x + db_width/2)
+      .attr("cy", function(d){return d;})
+      .attr("rx", db_width/2)
+      .attr("ry", ellipse_y)
+      .attr("fill", "#ffee99")
+      .attr("stroke-width", stroke_width)
+      .attr("stroke", "black");
+      var db_rects2 = svg.selectAll("db_rects2")
+      .data([1])
+      .enter()
+      .append("rect")
+      .attr("width", db_width - 2*stroke_width/2)
+      .attr("height", db_height/2)
+      .attr("x", db_x + stroke_width/2)
+      .attr("y", db_y + db_height/2)
+      .attr("fill", "#ffee99");
+
+      //DB and Text .
+      var text_datas = [["Run Time: ", latest_statistics_total_datas_0[0],"(sec)"],
+                        ["Writes  : ", latest_statistics_total_datas_0[1],"(times)"],
+                        ["Batches : ", latest_statistics_total_datas_0[2],"(times)"],
+                        ["Ingest  : ", latest_statistics_total_datas_0[3],"(GB)"],
+                        ["Flush   : ", latest_statistics_total_datas_0[4],"(GB)"]];
+      var db_text = svg.selectAll(".db_text")
+      .data(text_datas)
+      .enter()
+      .append("text")
+      .attr("class", "db_text")
+      .attr("x", db_x + 30)
+      .attr("y", function(d, i){return db_y + 60 + i * 25;})
+      .text(function(d){return d[0]+d[1]+d[2];})
+      .attr("font-weight", "bold")
+      .attr("font-family", "selif");
+
+      //Memory Picture
+//      var memory_x = 20;
+ //     var memory_y = 20;
+  //    var memory_width = 280;
+  ///    var memory_height = 60;
+  //    var memory_base = svg.selectAll("memory_base")
+//      .data([1])
+//      .enter()
+///      .append("rect")
+///      .attr("width", memory_width)
+ ///     .attr("height", memory_height)
+  ///    .attr("x", memory_x)
+  //    .attr("y", memory_y)
+  //    .attr("fill", "#00aa00");
+ // /    var memory_piece = svg.selectAll("memory_piece")
+//      .data([1,1,1,1])
+ //     .enter()
+   //   .append("rect")
+     // .attr("width", memory_height - 20)
+//      .attr("height", memory_height - 20)
+  //    .attr("x", function(d,i){return memory_x + 20 + (memory_height+5) * i;})
+   //   .attr("y", memory_y + 10)
+    //  .attr("fill", "#555555");
+
+
+      //Layer id, file nums,
+      var layer_datas = [
+      [0, {filenum:4, filesize:8}],
+      [1, {filenum:1730, filesize:3354}],
+      [2, {filenum:590, filesize:1223}],
+      [3, {filenum:0, filesize:0}],
+      [4, {filenum:0, filesize:0}],
+      [5, {filenum:0, filesize:0}],
+      [6, {filenum:0, filesize:0}]];
+      //[7, {filenum:0, filesize:0}]];
+      var base_layers = svg.selectAll(".base_layers")
+      .data(layer_datas)
+      .enter()
+      .append("rect");
+      
+      var layers_width_max = w * 0.55;
+      base_layers
+      .attr("class", "base_layers")
+      .attr("width", layers_width_max)
+      .attr("height", bar_height)
+      .attr("x", bar_x_offset)
+      .attr("y", function(d, i){return i * (bar_height + bar_between) + 30;})
+      .attr("fill", "#FFF5CC")
+      .attr("stroke-width", 2)
+      .attr("stroke", "#ffbe00");
+
+      var max_file_num = 4 + 1730 + 590;
+      var max_file_size = 8 + 3354 + 1223;
+
+      var layers_by_filesize = svg.selectAll(".f_layers")
+      .data(layer_datas)
+      .enter()
+      .append("rect");
+
+      layers_by_filesize
+      .attr("class", "f_layers")
+      .attr("width", function(d){return layers_width_max * d[1].filesize * 1.0/max_file_size;})
+      .attr("height", 30)
+      .attr("x", bar_x_offset)
+      .attr("y", function(d, i){return i * (bar_height + bar_between) + 30;})
+      .attr("fill", "#FFE084")
+      .attr("stroke-width", 2)
+      .attr("stroke", "#ffbe00");
+
+      function bytes_string(filesize){
+      if(filesize/1000 < 1){
+	return filesize+"M";
+	}
+       else if(filesize/(1000*1000) <1 ){
+	return filesize/1000+"G";
+       }
+       else if(filesize/(1000*1000*1000) <1) {
+	return filesize/1000/1000+"T";
+       }
+							 
+      }
+
+      var filenum_labels = svg.selectAll(".filenum_labels")
+      .data(layer_datas)
+      .enter()
+      .append("text")
+      .attr("class", "filenum_labels")
+      .attr("x", function(d){if(d[1].filesize*1.0/max_file_size < 0.5){return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset + 5;}
+	                     else{return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset - 115;}})
+      .attr("y", function(d, i){return i * (bar_height + bar_between) + 30 + 20;})
+      .text(function(d){return bytes_string(d[1].filesize)+"B("+d[1].filenum+"files)";})
+      .attr("font-weight", "bold")
+      .attr("font-family", "selif")
+      .attr("font-style", "italic");
+
+      var layer_labels = svg.selectAll(".layer_labels")
+      .data(layer_datas)
+      .enter()
+      .append("text")
+      .attr("class", "layer_labels")
+      .attr("x", bar_x_offset - 25)
+      .attr("y", function(d, i){return i * (bar_height + bar_between) + 30 + 20;})
+      .text(function(d){return "L"+d[0];})
+      .attr("font-weight", "bold")
+      .attr("font-family", "selif");
+
+      var bar = svg.selectAll("rect")
+      .data([1])
+      .enter()
+      .append("rect")
+      .attr("width",400)
+      .attr("height",30)
+      .attr("x", bar_x_offset - 80)
+      .attr("fill", "#ff0000")
+      .transition().duration(2000).attr("x",400).attr("fill", "#0000ff").remove();
+
+      var marker = svg.append("defs").append("marker")
+	 				     .attr({
+					     'id': "arrowhead",
+					     'refX': 0,
+					     'refY': 2,
+					     'markerWidth': 40,
+					     'markerHeight': 40,
+					     'orient': "auto"
+					     });
+					     marker.append("path")
+					     .attr({
+					     d: "M 0,0 V 10 L4,2 Z",
+					     fill: "steelblue"
+					     });
+    </script>
+  </body>
+</html>

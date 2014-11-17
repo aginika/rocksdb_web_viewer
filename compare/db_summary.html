@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <script>
+      var w = 1000;
+      var h = 500;
+      var svg = d3.select("body")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+      //Layer id, file nums,
+      var layer_datas = [
+      [0, {filenum:10, filesize:10}],
+      [1, {filenum:5, filesize:100}],
+      [2, {filenum:12, filesize:1000}],
+      [3, {filenum:9, filesize:10000}],
+      [4, {filenum:0, filesize:0}],
+      [5, {filenum:0, filesize:0}],
+      [6, {filenum:0, filesize:0}],
+      [7, {filenum:0, filesize:0}]];
+      var base_layers = svg.selectAll(".base_layers")
+      .data(layer_datas)
+      .enter()
+      .append("rect");
+
+      var layers_width_max = w * 0.75;
+      base_layers
+      .attr("class", "base_layers")
+      .attr("width", layers_width_max)
+      .attr("height", 50)
+      .attr("x", 80)
+      .attr("y", function(d, i){return i * 80 + 30;})
+      .attr("fill", "#FFF5CC")
+      .attr("stroke-width", 2)
+      .attr("stroke", "#ffbe00");
+
+      var max_file_num = 12;
+      var max_file_size = 10000;
+
+      var layers_by_filesize = svg.selectAll(".f_layers")
+      .data(layer_datas)
+      .enter()
+      .append("rect");
+
+      layers_by_filesize
+      .attr("class", "f_layers")
+      .attr("width", function(d){return layers_width_max * d[1].filesize * 1.0/max_file_size;})
+      .attr("height", 50)
+      .attr("x", 80)
+      .attr("y", function(d, i){return i * 80 + 30;})
+      .attr("fill", "#FFE084")
+      .attr("stroke-width", 2)
+      .attr("stroke", "#ffbe00");
+
+      function bytes_string(filesize){
+      if(filesize/1000 < 1){
+	return filesize+"M";
+	}
+       else if(filesize/(1000*1000) <1 ){
+	return filesize/1000+"G";
+       }
+       else if(filesize/(1000*1000*1000) <1) {
+	return filesize/1000/1000+"T";
+       }
+							 
+      }
+
+      var filenum_labels = svg.selectAll(".filenum_labels")
+      .data(layer_datas)
+      .enter()
+      .append("text")
+      .attr("class", "filenum_labels")
+      .attr("x", function(d){return layers_width_max * d[1].filesize * 1.0/max_file_size + 85;})
+      .attr("y", function(d, i){return i * 80 + 30 + 30;})
+      .text(function(d){return bytes_string(d[1].filesize)+"B("+d[1].filenum+"files)";})
+      .attr("font-weight", "bold")
+      .attr("font-family", "selif");
+
+      var layer_labels = svg.selectAll(".layer_labels")
+      .data(layer_datas)
+      .enter()
+      .append("text")
+      .attr("class", "layer_labels")
+      .attr("x", 0)
+      .attr("y", function(d, i){return i * 80 + 30 + 30;})
+      .text(function(d){return "Layer"+d[0];})
+      .attr("font-weight", "bold")
+      .attr("font-family", "selif");
+
+      var bar = svg.selectAll("rect")
+      .data([1])
+      .enter()
+      .append("rect")
+      .attr("width",400)
+      .attr("height",30)
+      .attr("x", 0)
+      .attr("fill", "#ff0000")
+      .transition().duration(2000).attr("x",400).attr("fill", "#0000ff").remove();
+
+      var marker = svg.append("defs").append("marker")
+	 				     .attr({
+					     'id': "arrowhead",
+					     'refX': 0,
+					     'refY': 2,
+					     'markerWidth': 40,
+					     'markerHeight': 40,
+					     'orient': "auto"
+					     });
+					     marker.append("path")
+					     .attr({
+					     d: "M 0,0 V 10 L4,2 Z",
+					     fill: "steelblue"
+					     });
+    </script>
+  </body>
+</html>
