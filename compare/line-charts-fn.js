@@ -164,7 +164,7 @@ $(function () {
 	    filenum: {
 		title: "Filenums Changes",
 		suffix: " files",
-		data:[file_nums_L1, file_nums_L2],
+		data:[file_nums_L1_0, file_nums_L2_0],
 		yAxis:{
 		    labels: {
 			format: '{value} files',
@@ -182,8 +182,8 @@ $(function () {
 	    inputnmb: {
 		title: "InputFile N MB",
 		suffix: " MB",
-		data:[input_file_n_mb_datas_L1,
-		      input_file_n_mb_datas_L2],
+		data:[input_file_n_mb_datas_L1_0,
+		      input_file_n_mb_datas_L2_0],
 		yAxis:{
 		    labels: {
 			format: '{value} MB',
@@ -200,8 +200,8 @@ $(function () {
 	    },
 	    inputnp1mb: {
 		title: "InputFile Np1 MB",
-		data:[input_file_np1_mb_datas_L1,
-		      input_file_np1_mb_datas_L2],
+		data:[input_file_np1_mb_datas_L1_0,
+		      input_file_np1_mb_datas_L2_0],
 		suffix: " MB",
 		yAxis:
 		{
@@ -220,8 +220,8 @@ $(function () {
 	    },
 	    outputmb: {
 		title: "OutputFile MB",
-		data : [output_file_mb_datas_L1,
-			output_file_mb_datas_L2],
+		data : [output_file_mb_datas_L1_0,
+			output_file_mb_datas_L2_0],
 		suffix: " MB",
 		yAxis:
 		{
@@ -241,8 +241,8 @@ $(function () {
 	    readam: {
 		title:"Read Amplify",
 		suffix: " times",
-		data: [read_am_datas_L1,
-		       read_am_datas_L2],
+		data: [read_am_datas_L1_0,
+		       read_am_datas_L2_0],
 		yAxis:
 		{
 		    labels: {
@@ -261,8 +261,8 @@ $(function () {
 	    writeam: {
 		title:"Write Amplify",
 		suffix: " times",
-		data: [write_am_datas_L1,
-		       write_am_datas_L2],
+		data: [write_am_datas_L1_0,
+		       write_am_datas_L2_0],
 		yAxis:
 		{
 		    labels: {
@@ -281,8 +281,8 @@ $(function () {
 	    readbytes: {
 		title:"Read Bytes",
 		suffix: " MB/s",
-		data: [read_datas_L1,
-		       read_datas_L2],
+		data: [read_datas_L1_0,
+		       read_datas_L2_0],
 		yAxis:
 		{
 		    labels: {
@@ -301,8 +301,8 @@ $(function () {
 	    writebytes: {
 		title:"Write Amplify",
 		suffix: " MB/s",
-		data: [write_datas_L1,
-		       write_datas_L2],
+		data: [write_datas_L1_0,
+		       write_datas_L2_0],
 		yAxis:
 		{
 		    labels: {
@@ -339,7 +339,7 @@ $(function () {
 
 	
 	
-	simple_line_charts_template.series = [file_nums_L0, file_nums_L1,file_nums_L2];
+	simple_line_charts_template.series = [file_nums_L0_0, file_nums_L1_0,file_nums_L2_0];
 
 	$('#amount-of-writes').highcharts(simple_line_charts_template);
     });

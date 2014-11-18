@@ -7,14 +7,23 @@ var db_x = 10;
 var ellipse_y = 30;
 
 //Layer id, file nums,
-var layer_datas = [
-		   [0, {filenum:4, filesize:8}],
-		   [1, {filenum:1730, filesize:3354}],
-		   [2, {filenum:590, filesize:1223}],
-		   [3, {filenum:0, filesize:0}],
-		   [4, {filenum:0, filesize:0}],
-		   [5, {filenum:0, filesize:0}],
-		   [6, {filenum:0, filesize:0}]];
+var layer_datas_0 = [
+		     [0, {filenum:4, filesize:8}],
+		     [1, {filenum:1730, filesize:3354}],
+		     [2, {filenum:590, filesize:1223}],
+		     [3, {filenum:0, filesize:0}],
+		     [4, {filenum:0, filesize:0}],
+		     [5, {filenum:0, filesize:0}],
+		     [6, {filenum:0, filesize:0}]];
+
+var layer_datas_1 = [
+		     [0, {filenum:10, filesize:19}],
+		     [1, {filenum:1630, filesize:2349}],
+		     [2, {filenum:690, filesize:1207}],
+		     [3, {filenum:2, filesize:1000}],
+		     [4, {filenum:4, filesize:10}],
+		     [5, {filenum:0, filesize:0}],
+		     [6, {filenum:0, filesize:0}]];
 var bar_height = 30;
 var bar_between = 10 + bar_height;
 var bar_x_offset = 350;
@@ -375,18 +384,24 @@ $(function(){
 	      }
 	  }
 
+	  var canvas = document.createElement('canvas');
+	  var ctx = canvas.getContext("2d");
+	  ctx.font = "18px Arial bold selif";        
+	  //var db_name_width = ctx.measureText(db_name).width;
+
 	  var filenum_labels = svg.selectAll(".filenum_labels"+id)
 	      .data(layer_datas)
 	      .enter()
 	      .append("text")
 	      .attr("class", "filenum_labels"+id)
 	      .attr("x", function(d){if(d[1].filesize*1.0/max_file_size < 0.5){return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset + 5;}
-		      else{return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset - 115;}})
+		      else{return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset - ctx.measureText(bytes_string(d[1].filesize)+"B("+d[1].filenum+"files)").width;}})
 	      .attr("y", function(d, i){return i * (bar_height + bar_between) + bar_y_offset + 20;})
 	      .text(function(d){return bytes_string(d[1].filesize)+"B("+d[1].filenum+"files)";})
 	      .attr("font-weight", "bold")
 	      .attr("font-family", "selif")
-	      .attr("font-style", "italic");
+	      .attr("font-style", "italic")
+	      .attr("font-size", "16px");
 
 	  var visibility = 1;
 	  if(!show_label){
@@ -415,8 +430,8 @@ $(function(){
 //	      .transition().duration(2000).attr("x",400).attr("fill", "#0000ff").remove();
       }
 
-      draw_layers(0, layer_datas, bar_height, bar_between, bar_x_offset, bar_y_offset, "#ffdddd", "#ff4444", "#ff9999", "#ff4444", true);
-      draw_layers(1, layer_datas, bar_height, bar_between, bar_x_offset, bar_y_offset + bar_height + 3, "#ddddff", "#4444ff", "#9999ff", "#4444ff", false);
+      draw_layers(0, layer_datas_0, bar_height, bar_between, bar_x_offset, bar_y_offset, "#ffdddd", "#ff4444", "#ff9999", "#ff4444", true);
+      draw_layers(1, layer_datas_1, bar_height, bar_between, bar_x_offset, bar_y_offset + bar_height + 3, "#ddddff", "#4444ff", "#9999ff", "#4444ff", false);
 
       var marker = svg.append("defs").append("marker")
 	  .attr({
