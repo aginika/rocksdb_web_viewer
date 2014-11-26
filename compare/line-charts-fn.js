@@ -67,6 +67,8 @@ var target_dictionary;
 var updateCharts = function(){
     //if it is one
     if(target_variables.length == 1){
+	//console.log("One");
+	//console.log(target_variables[0]);
 	var chart = $('#amount-of-writes').highcharts().destroy();
 	//set Title
 	simple_line_charts_template.title = {text: target_variables[0][1].title};
@@ -79,6 +81,13 @@ var updateCharts = function(){
 	//set yAxis
 	simple_line_charts_template.yAxis.title.text = target_variables[0][1].title
 	
+	target_variables[0][1].data
+	var target_datas = [];
+	for(var i = 0; i < target_variables.length ;i++){
+	    //	    if(layer_onoffs[i] == 1)
+	    //		target_datas.push(target_variables[0][1].data[i])
+	}
+	console.log(target_datas);
 	simple_line_charts_template.series = target_variables[0][1].data;
 	$('#amount-of-writes').highcharts(simple_line_charts_template);
     }
@@ -94,26 +103,33 @@ var updateCharts = function(){
 					   target_variables[0][1].yAxis,
 					   ];
 
-	var data1 = {
+	var datas = []
+	for(var i = 0; i < target_variables[0][1].data.length; i++){
+	    var data0 = {
                 name: target_variables[0][1].title,
 		type: 'line',
 		yAxis: 1,
-		data: target_variables[0][1].data[0].data,
+		data: target_variables[0][1].data[i].data,
 		tooltip: {
 		    valueSuffix: target_variables[0][1].suffix
 		}
 	    };
-
-	var data2 = {
+	    datas.push(data0);
+	}
+	for(var i = 0; i < target_variables[1][1].data.length; i++){
+	    var data1 = {
                 name: target_variables[1][1].title,
 		type: 'line',
 		yAxis: 0,
-		data: target_variables[1][1].data[0].data,
+		data: target_variables[1][1].data[i].data,
 		tooltip: {
 		    valueSuffix: target_variables[1][1].suffix
 		}
 	    };
-	dual_line_charts_template.series = [data1, data2];
+	    datas.push(data1);
+	}
+
+	dual_line_charts_template.series = datas;
 	console.log(dual_line_charts_template);
 	$('#amount-of-writes').highcharts(dual_line_charts_template);	
     }
@@ -151,31 +167,57 @@ var addNewLayer = function(){
     var target_layer = this.getAttribute("layer");
     if(this.checked){
 	layer_onoffs[target_layer] = 1;
-	console.log(target_layer + " is added");
     }else{
 	layer_onoffs[target_layer] = 0;
-	console.log(target_layer + " is deleted");
     }
-    console.log(layer_onoffs);
+    updateCharts();
 };
-    
+var data_type_colors = [];
+
 $(function () {
+	data_type_colors["filenum"]    = ["#FF33FF","#FF33FF","#EE2FEE","#DD23DD","#CC1FCC","#BB11BB","#AA0FAA","#990299"];
+	data_type_colors["inputnmb"]   = ["#00CCFF","#00C5EE","#00C1DD","#00BCCF","#00B2BF","#00A0AF","#00809F","#00708F"];
+	data_type_colors["inputnp1mb"] = ["#FF9900","#FF9900","#EE8800","#DD7700","#CC6600","#BB5500","#AA4400","#993300"];
+	data_type_colors["outputmb"]   = ["#FFFF55","#FFFF55","#EEEE4F","#DDCC44","#CCBB3F","#BBAA33","#AA992F","#998822"];
+	data_type_colors["readam"]     = ["#22FFFF","#22FFFF","#22EEEE","#22DDDD","#22CCCC","#22BBBB","#22AAAA","#229999"];
+	data_type_colors["writeam"]    = ["#17F9AD","#17F9AD","#17F9A3","#17F99B","#17F992","#17F98B","#17F982","#17F97D"];
+	data_type_colors["readbytes"]  = ["#C9FF2F","#C9FF2F","#C1FF2F","#B9FF2F","#B1FF2F","#A9FF2F","#A1FF2F","#99FF2F"];
+	data_type_colors["writebytes"] = ["#FFD700","#FFD700","#EED700","#DDD700","#CCD700","#BBD700","#AAD700","#99D700",];
+
+	file_nums_L0_0.color = data_type_colors["filenum"][1];
+	file_nums_L1_0.color = data_type_colors["filenum"][2];
+	file_nums_L2_0.color = data_type_colors["filenum"][3];
+	input_file_n_mb_datas_L1_0.color  = data_type_colors["inputnmb"][1];
+	input_file_n_mb_datas_L2_0.color  = data_type_colors["inputnmb"][2];
+	input_file_np1_mb_datas_L1_0.color = data_type_colors["inputnp1mb"][1];
+	input_file_np1_mb_datas_L2_0.color = data_type_colors["inputnp1mb"][2];
+	output_file_mb_datas_L1_0.color = data_type_colors["outputmb"][1];
+	output_file_mb_datas_L2_0.color = data_type_colors["outputmb"][2];
+	read_am_datas_L1_0.color =  data_type_colors["readam"][1];
+	read_am_datas_L2_0.color =  data_type_colors["readam"][2];
+	write_am_datas_L1_0.color =  data_type_colors["writeam"][1];
+	write_am_datas_L2_0.color =  data_type_colors["writeam"][2];
+	read_datas_L1_0.color = data_type_colors["readbytes"][1];
+	read_datas_L2_0.color = data_type_colors["readbytes"][2];
+	write_datas_L1_0.color = data_type_colors["writebytes"][1];
+	write_datas_L2_0.color = data_type_colors["writebytes"][2];
+
 	target_dictionary = {
 	    filenum: {
 		title: "Filenums Changes",
 		suffix: " files",
-		data:[file_nums_L1_0, file_nums_L2_0],
+		data:[file_nums_L0_0, file_nums_L1_0, file_nums_L2_0],
 		yAxis:{
 		    labels: {
 			format: '{value} files',
 			style: {
-			    color: Highcharts.getOptions().colors[0]
+			    color: data_type_colors["filenum"][0]//Highcharts.getOptions().colors[0]
 			}
 		    },
 		    title: {
 			text: 'FileNum',
 			style: {
-			    color: Highcharts.getOptions().colors[0]
+			    color: data_type_colors["filenum"][0]//Highcharts.getOptions().colors[0]
 			}
 		    }},
 	    },
@@ -188,13 +230,13 @@ $(function () {
 		    labels: {
 			format: '{value} MB',
 			style: {
-			    color: Highcharts.getOptions().colors[1]
+			    color: data_type_colors["inputnmb"][0]//Highcharts.getOptions().colors[1]
 			}
 		    },
 		    title: {
 			text: 'Size',
 			style: {
-			    color: Highcharts.getOptions().colors[1]
+			    color: data_type_colors["inputnmb"][0]//Highcharts.getOptions().colors[1]
 			}
 		    }},
 	    },
@@ -208,13 +250,13 @@ $(function () {
 		    labels: {
 			format: '{value} MB',
 			style: {
-			    color: Highcharts.getOptions().colors[2]
+			    color: data_type_colors["inputnp1mb"][0]//"#FFCCAA"//Highcharts.getOptions().colors[2]
 			}
 		    },
 		    title: {
 			text: 'FileNum',
 			style: {
-			    color: Highcharts.getOptions().colors[2]
+			    color: data_type_colors["inputnp1mb"][0]//"#FFCCAA"//Highcharts.getOptions().colors[2]
 			}
 		    }},
 	    },
@@ -228,13 +270,13 @@ $(function () {
 		    labels: {
 			format: '{value} MB',
 			style: {
-			    color: Highcharts.getOptions().colors[3]
+			    color: data_type_colors["outputmb"][0]//"#AACCAA"//Highcharts.getOptions().colors[3]
 			}
 		    },
 		    title: {
 			text: 'Size',
 			style: {
-			    color: Highcharts.getOptions().colors[3]
+			    color: data_type_colors["outputmb"][0]//"#FFCCAA"//Highcharts.getOptions().colors[3]
 			}
 		    }},
 	    },
@@ -248,13 +290,13 @@ $(function () {
 		    labels: {
 			format: '{value} times',
 			style: {
-			    color: Highcharts.getOptions().colors[4]
+			    color: data_type_colors["readam"][0]//Highcharts.getOptions().colors[4]
 			}
 		    },
 		    title: {
 			text: 'Ampilfy',
 			style: {
-			    color: Highcharts.getOptions().colors[4]
+			    color: data_type_colors["readam"][0]//Highcharts.getOptions().colors[4]
 			}
 		    }},
 	    },
@@ -268,13 +310,13 @@ $(function () {
 		    labels: {
 			format: '{value} times',
 			style: {
-			    color: Highcharts.getOptions().colors[5]
+			    color: data_type_colors["writeam"][0]//Highcharts.getOptions().colors[5]
 			}
 		    },
 		    title: {
 			text: 'Amplify',
 			style: {
-			    color: Highcharts.getOptions().colors[5]
+			    color: data_type_colors["writeam"][0]//Highcharts.getOptions().colors[5]
 			}
 		    }},
 	    },
@@ -288,13 +330,13 @@ $(function () {
 		    labels: {
 			format: '{value} MB/s',
 			style: {
-			    color: Highcharts.getOptions().colors[6]
+			    color: data_type_colors["readbytes"][0]//Highcharts.getOptions().colors[6]
 			}
 		    },
 		    title: {
 			text: 'Read Bytes/s',
 			style: {
-			    color: Highcharts.getOptions().colors[6]
+			    color: data_type_colors["readbytes"][0]//Highcharts.getOptions().colors[6]
 			}
 		    }},
 	    },
@@ -308,13 +350,13 @@ $(function () {
 		    labels: {
 			format: '{value} MB/s',
 			style: {
-			    color: Highcharts.getOptions().colors[7]
+			    color: data_type_colors["writebytes"][0]//Highcharts.getOptions().colors[7]
 			}
 		    },
 		    title: {
 			text: 'Write Bytes/s',
 			style: {
-			    color: Highcharts.getOptions().colors[7]
+			    color: data_type_colors["writebytes"][0]//Highcharts.getOptions().colors[7]
 			}
 		    }},
 	    },

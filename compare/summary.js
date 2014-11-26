@@ -157,7 +157,6 @@ function onoffcolumns(){
 
 var tooltips_state = true;
 function onofftooltips(){
-    console.log("hey");
     if(tooltips_state){
 	$("table").tooltip('disable');
 	$("#onofftooltip")[0].textContent = "Show tooltip";
@@ -344,6 +343,13 @@ $(function(){
 	      .append("rect");
       
 	  var layers_width_max = w * 0.55;
+	  var layer_tips = d3.select("body").append("div")
+	      .attr("class", "tooltip")               
+	      .style("opacity", 0)
+	      .style("border", "2px splid")
+	      .style("border-radius", "12px")
+	      .style("box-shadow", "10px 10px 5px #888888");
+
 	  base_layers
 	      .attr("class", "base_layers"+id)
 	      .attr("width", layers_width_max)
@@ -352,7 +358,38 @@ $(function(){
 	      .attr("y", function(d, i){return i * (bar_height + bar_between) + bar_y_offset;})
 	      .attr("fill", base_color)
 	      .attr("stroke-width", 2)
-	      .attr("stroke", base_border_color);
+	      .attr("stroke", base_border_color)
+	      .on("mouseover", function(d,i) {
+		      layer_tips.transition()        
+			  .duration(200)
+			  .style("opacity", 1)
+			  .style("width", 550)
+			  .style("height", 110)
+			  .style("background-color", "#FFeecc")
+			  .style("padding", "5");
+		      layer_tips.html("Latest L"+i+" Infos:<br/>"
+				      + "<span style='font-size:8px'>" //+Score : " + d["L"+i][1]
+				      + "<br/>" + "Read(GB) : " + d["L"+i][2] + " (n: "+ d["L"+i][3]+", np1: "+ d["L"+i][4]+ ")" + " Write(GB): "+d["L"+i][5] + "(new: "+d["L"+i][6]+")"
+				      + "<br/>" + "RW-amp : " + d["L"+i][7] + " W-Amp : " +d["L"+i][8] + " Rd(MB/s) : " + d["L"+i][9] + " Wr(MB/s) : " + d["L"+i][10]
+				      + "<br/>" + "Rn(cnt) : " + d["L"+i][11]+ " Rnp1(cnt) : " + d["L"+i][12] +" Wnp1(cnt) : " + d["L"+i][13]+" Wnew(cnt) : " + d["L"+i][14] + " Comp(sec) : " + d["L"+i][15] + " Comp(cnt) : " + d["L"+i][16]
+				      + "<br/>" + "Avg(sec) : " + d["L"+i][17] + " Stall(sec) : " +d["L"+i][18]+ " Stall(cnt) : " + d["L"+i][19]+ " Avg(ms) : " +d["L"+i][20]+ " RecordIn : "+d["L"+i][21]+ " RecordDrop : "+ d["L"+i][22] + "</span>")
+			  .style("left", (d3.event.pageX + 50) + "px")
+			  .style("top", (d3.event.pageY + 50) + "px")
+			  .style("width", 500)
+			  .style("height", 100)
+			  .style("position", "absolute")
+			  .style("font-weight", "bold")
+			  .style("pointer-events", "none");
+		  })
+	      .on("mouseout", function(d) {       
+		      layer_tips.transition()        
+			  .duration(200)
+			  .style("opacity", 0);
+		      layer_tips.style("left", (20000) + "px")
+			  .style("top", (20000) + "px");
+		  });
+
+
 	  
 	  var max_file_num = 4 + 1730 + 590;
 	  var max_file_size = 8 + 3354 + 1223;
@@ -364,11 +401,12 @@ $(function(){
 
 	  layers_by_filesize
 	      .attr("class", "f_layers"+id)
-	      .attr("width", function(d){return layers_width_max * d[1].filesize * 1.0/max_file_size;})
+	      .attr("width", function(d,i){console.log(d["L"+i]);return layers_width_max * d["L"+i][1] * 1.0/max_file_size;})
 	      .attr("height", 30)
 	      .attr("x", bar_x_offset)
 	      .attr("y", function(d, i){return i * (bar_height + bar_between) + bar_y_offset;})
 	      .attr("fill", layer_color)
+	      .style("pointer-events", "none")
 	      .attr("stroke-width", 2)
 	      .attr("stroke", layer_border_color);
 	  
@@ -394,10 +432,11 @@ $(function(){
 	      .enter()
 	      .append("text")
 	      .attr("class", "filenum_labels"+id)
-	      .attr("x", function(d){if(d[1].filesize*1.0/max_file_size < 0.5){return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset + 5;}
-		      else{return layers_width_max * d[1].filesize * 1.0/max_file_size + bar_x_offset - ctx.measureText(bytes_string(d[1].filesize)+"B("+d[1].filenum+"files)").width;}})
+	      .attr("x", function(d,i){if(d["L"+i][1]*1.0/max_file_size < 0.5){return layers_width_max * d["L"+i][1] * 1.0/max_file_size + bar_x_offset + 5;}
+		      else{return layers_width_max * d["L"+i][1] * 1.0/max_file_size + bar_x_offset - ctx.measureText(bytes_string(d["L"+i][1])+"B("+d["L"+i][1]+"files)").width;}})
 	      .attr("y", function(d, i){return i * (bar_height + bar_between) + bar_y_offset + 20;})
-	      .text(function(d){return bytes_string(d[1].filesize)+"B("+d[1].filenum+"files)";})
+	      .style("pointer-events", "none")
+	      .text(function(d,i){return bytes_string(d["L"+i][1])+"B("+d["L"+i][0]+"files)";})
 	      .attr("font-weight", "bold")
 	      .attr("font-family", "selif")
 	      .attr("font-style", "italic")
@@ -415,7 +454,7 @@ $(function(){
 	      .attr("x", bar_x_offset - 25)
 	      .attr("y", function(d, i){return i * (bar_height + bar_between) + bar_y_offset + 20;})
 	      .attr("opacity", visibility)
-	      .text(function(d){return "L"+d[0];})
+	      .text(function(d,i){return "L"+i;})
 	      .attr("font-weight", "bold")
 	      .attr("font-family", "selif");
 
@@ -430,8 +469,43 @@ $(function(){
 //	      .transition().duration(2000).attr("x",400).attr("fill", "#0000ff").remove();
       }
 
-      draw_layers(0, layer_datas_0, bar_height, bar_between, bar_x_offset, bar_y_offset, "#ffdddd", "#ff4444", "#ff9999", "#ff4444", true);
-      draw_layers(1, layer_datas_1, bar_height, bar_between, bar_x_offset, bar_y_offset + bar_height + 3, "#ddddff", "#4444ff", "#9999ff", "#4444ff", false);
+      new_l0 = [];
+      for(var i = 0; i <latest_statistics_compaction_datas_0.length; i++){
+	  var element = latest_statistics_compaction_datas_0[i];
+	  if( element["Sum"] ){
+	  }
+	  else if( element["Int"] ){
+	  }else{
+	      new_l0.push(element);
+	  }
+      }
+      new_l1 = [];
+      for(var i = 0; i <latest_statistics_compaction_datas_1.length; i++){
+	  var element = latest_statistics_compaction_datas_1[i];
+	  if( element["Sum"] ){
+	  }
+	  else if( element["Int"] ){
+	  }else{
+	      new_l1.push(element);
+	  }
+      }
+
+      lscd0_len = new_l0.length;
+      for(var i = lscd0_len; i < 7 ; i++ ){
+	  var dict  = [];
+	  dict["L"+i] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	  new_l0.push(dict);
+      }
+      lscd1_len = new_l1.length;
+      for(var i = lscd1_len; i < 7 ; i++ ){
+	  var dict = [];
+	  dict["L"+i] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	  new_l1.push(dict);
+      }
+    console.log(latest_statistics_compaction_datas_0);
+    console.log(latest_statistics_compaction_datas_1);
+    draw_layers(0, new_l0, bar_height, bar_between, bar_x_offset, bar_y_offset, "#ffdddd", "#ff4444", "#ff9999", "#ff4444", true);
+    draw_layers(1, new_l1, bar_height, bar_between, bar_x_offset, bar_y_offset + bar_height + 3, "#ddddff", "#4444ff", "#9999ff", "#4444ff", false);
 
       var marker = svg.append("defs").append("marker")
 	  .attr({

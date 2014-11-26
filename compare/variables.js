@@ -10569,7 +10569,7 @@ var latest_statistics_compaction_datas_0 =
 [
 {L0:
 [
-'4/0',
+'4',
 '8',
 '0',
 '0',
@@ -10595,7 +10595,7 @@ var latest_statistics_compaction_datas_0 =
 ]},
 {L1:
 [
-'1730/0',
+'1730',
 '3554',
 '429.2',
 '4.8',
@@ -10621,7 +10621,7 @@ var latest_statistics_compaction_datas_0 =
 ]},
 {L2:
 [
-'590/0',
+'590',
 '1223',
 '3',
 '1.1',
@@ -10647,7 +10647,7 @@ var latest_statistics_compaction_datas_0 =
 ]},
 {Sum:
 [
-'2324/0',
+'2324',
 '4786',
 '432.2',
 '6',
@@ -10673,7 +10673,7 @@ var latest_statistics_compaction_datas_0 =
 ]},
 {Int:
 [
-'0/0',
+'0',
 '0',
 '20.6',
 '0.1',
@@ -24415,7 +24415,7 @@ var latest_statistics_compaction_datas_1 =
 [
 {L0:
 [
-'4/0',
+'4',
 '8',
 '0',
 '0',
@@ -24441,7 +24441,7 @@ var latest_statistics_compaction_datas_1 =
 ]},
 {L1:
 [
-'1730/0',
+'1730',
 '3554',
 '429.2',
 '4.8',
@@ -24467,7 +24467,7 @@ var latest_statistics_compaction_datas_1 =
 ]},
 {L2:
 [
-'590/0',
+'590',
 '1223',
 '3',
 '1.1',
@@ -24493,7 +24493,7 @@ var latest_statistics_compaction_datas_1 =
 ]},
 {Sum:
 [
-'2324/0',
+'2324',
 '4786',
 '432.2',
 '6',
@@ -24519,7 +24519,7 @@ var latest_statistics_compaction_datas_1 =
 ]},
 {Int:
 [
-'0/0',
+'0',
 '0',
 '20.6',
 '0.1',
